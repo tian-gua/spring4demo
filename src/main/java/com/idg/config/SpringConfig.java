@@ -6,6 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 
 /**
  * Created by yehao on 16/7/15.
+ * spring配置类
  */
 @Configuration
 @ComponentScan(basePackages = {"com.idg"})
