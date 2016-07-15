@@ -15,7 +15,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.idg.web"})
+@ComponentScan(basePackages = {"com.idg"})
 public class SpringmvcConfig extends WebMvcConfigurerAdapter {
 
     /**
@@ -40,4 +40,18 @@ public class SpringmvcConfig extends WebMvcConfigurerAdapter {
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
+
+//
+//    public ContentNegotiationManager contentNegotiationManager(){
+//        ContentNegotiationManager contentNegotiationManager = new ContentNegotiationManager();
+//        contentNegotiationManager.
+//        return contentNegotiationManager;
+//    }
+
+//    @Bean
+//    public View contentNegotiatingViewResolver() {
+//        return new MappingJackson2JsonView();
+//    }
+
+
 }
