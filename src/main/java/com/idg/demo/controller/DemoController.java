@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import com.idg.common.DemoBean;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by yehao on 16/7/15.
  */
@@ -16,13 +19,12 @@ public class DemoController {
     @Autowired
     private DemoBean demo;
 
-//    @RequestMapping("/index")
-//    public Map<String, Object> index() {
-//        Map<String, Object> model = new HashMap<String, Object>();
-//        model.put("hello", "spring4");
-//        return model;
-//    }
-//    
+    @RequestMapping("/json")
+    public Map<String, Object> json() {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("hello", "spring4");
+        return model;
+    }
 
     @RequestMapping("/index")
     public ModelAndView index() {

@@ -16,6 +16,8 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
      * @return
      */
     protected Class<?>[] getRootConfigClasses() {
+        //激活profile
+        System.setProperty("spring.profiles.active", "pro");
         return new Class<?>[]{SpringConfig.class};
     }
 
