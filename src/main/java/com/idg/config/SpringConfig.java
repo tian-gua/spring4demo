@@ -1,6 +1,7 @@
 package com.idg.config;
 
-import com.idg.common.DemoBean;
+import com.idg.common.mybatis.MybatisMapper;
+import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
@@ -10,6 +11,7 @@ import org.springframework.core.env.Environment;
  * spring配置类
  */
 @Configuration
+@ImportResource("classpath:spring-mybatis.xml")
 @ComponentScan(basePackages = {"com.idg"})
 @PropertySource("classpath:demo.properties")
 public class SpringConfig {
@@ -17,15 +19,19 @@ public class SpringConfig {
     @Autowired
     private Environment environment;
 
+
+    /**
+     * mybatis扫描mapper接口
+     *
+     * @return
+     */
     @Bean
-    @Profile("pro")
-    public DemoBean demo() {
-        return new DemoBean(environment.getProperty("param"));
+    public MapperScannerConfigurer mapperScannerConfigurer() {
+        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
+        mapperScannerConfigurer.setBasePackage("com.idg");
+        mapperScannerConfigurer.setMarkerInterface(MybatisMapper.class);
+        return mapperScannerConfigurer;
     }
 
-    @Bean()
-    @Profile("dev")
-    public DemoBean demo2() {
-        return new DemoBean("abc");
-    }
+
 }

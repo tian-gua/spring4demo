@@ -1,10 +1,10 @@
 package com.idg.demo.controller;
 
+import com.idg.demo.domain.Module;
+import com.idg.demo.service.DemoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-import com.idg.common.DemoBean;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class DemoController {
 
     @Autowired
-    private DemoBean demo;
+    private DemoService demoService;
 
     @RequestMapping("/json")
     public Map<String, Object> json() {
@@ -27,8 +27,7 @@ public class DemoController {
     }
 
     @RequestMapping("/index")
-    public ModelAndView index() {
-        System.out.println(demo.encrypt());
-        return new ModelAndView("index");
+    public Module findModule(Integer id) {
+        return demoService.findModule(id);
     }
 }
