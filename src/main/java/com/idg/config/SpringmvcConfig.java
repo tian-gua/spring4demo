@@ -1,13 +1,13 @@
 package com.idg.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
+import org.springframework.web.servlet.view.velocity.VelocityViewResolver;
 
 /**
  * Created by yehao on 16/7/15.
@@ -18,13 +18,38 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ComponentScan(basePackages = {"com.idg"})
 public class SpringmvcConfig extends WebMvcConfigurerAdapter {
 
+
     /**
-     * 配置视图解析器
+     * 配置velocity
+     *
+     * @return
+     */
+    @Bean
+    public VelocityConfigurer velocityConfigurer() {
+        VelocityConfigurer velocityConfigurer = new VelocityConfigurer();
+        velocityConfigurer.setResourceLoaderPath("/WEB-INFO/view/");
+        return velocityConfigurer;
+    }
+
+    /**
+     * 配置velocity视图解析器
      *
      * @return
      */
     @Bean
     public ViewResolver viewResolver() {
+        VelocityViewResolver velocityViewResolver = new VelocityViewResolver();
+        velocityViewResolver.setSuffix(".vm");
+        return velocityViewResolver;
+    }
+
+    /**
+     * 配置默认视图解析器
+     *
+     * @return
+     */
+    @Bean
+    public ViewResolver defaultViewResolver() {
         InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
         internalResourceViewResolver.setPrefix("/WEB-INFO/view/");
         internalResourceViewResolver.setSuffix(".jsp");
@@ -40,5 +65,6 @@ public class SpringmvcConfig extends WebMvcConfigurerAdapter {
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
+
 
 }
