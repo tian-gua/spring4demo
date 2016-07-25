@@ -5,6 +5,7 @@ mybatis会用到xml,这个没办法,mybatis就是基于xml的映射框架。
 >* spring4.2
 >* springmvc4.2
 >* mybatis3.4
+>* ehcache
 
 ##模板引擎
 >* velocity1.7
