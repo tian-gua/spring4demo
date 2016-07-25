@@ -1,7 +1,5 @@
-package com.idg;
+package config;
 
-import com.idg.config.SpringConfig;
-import com.idg.config.SpringmvcConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**

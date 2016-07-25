@@ -1,4 +1,4 @@
-package com.idg;
+package config;
 
 import com.idg.common.filter.DemoFilter;
 import org.springframework.web.WebApplicationInitializer;
