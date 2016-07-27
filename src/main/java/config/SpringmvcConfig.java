@@ -1,6 +1,8 @@
 package config;
 
 import org.springframework.context.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -15,7 +17,7 @@ import org.springframework.web.servlet.view.velocity.VelocityViewResolver;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.idg"})
+@ComponentScan(basePackages = {"com.idg"}, includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class})}, excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = Service.class)})
 public class SpringmvcConfig extends WebMvcConfigurerAdapter {
 
 

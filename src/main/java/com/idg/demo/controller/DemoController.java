@@ -42,4 +42,9 @@ public class DemoController {
     public Module findModule(Integer id) {
         return demoService.findModule(id);
     }
+
+    @RequestMapping("/tx")
+    public int testTx() {
+        return demoService.testTx();
+    }
 }

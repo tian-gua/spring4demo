@@ -4,8 +4,9 @@ import com.idg.common.cache.DemoCache;
 import com.idg.demo.dao.ModuleMapper;
 import com.idg.demo.domain.Module;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by yehao on 16/7/18.
@@ -34,4 +35,21 @@ public class DemoServiceImpl implements DemoService {
         }
 
     }
+
+    /**
+     * 测试事务
+     *
+     * @return
+     */
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public int testTx() {
+        Module module = new Module();
+        module.setName("测试tx");
+        module.setProjectId(1);
+        int success = moduleMapper.insertSelective(module);
+        int i = 1 / 0;
+        return success;
+    }
+
+
 }

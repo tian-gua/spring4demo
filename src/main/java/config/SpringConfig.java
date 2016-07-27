@@ -11,6 +11,11 @@ import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
 
 /**
  * Created by yehao on 16/7/15.
@@ -18,8 +23,9 @@ import org.springframework.core.io.ClassPathResource;
  */
 @Configuration
 @ImportResource("classpath:spring-mybatis.xml")
-@ComponentScan(basePackages = {"com.idg"})
+@ComponentScan(basePackages = {"com.idg"}, excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class)})
 @PropertySource("classpath:demo.properties")
+@EnableTransactionManagement(proxyTargetClass = true)
 public class SpringConfig {
 
     @Autowired
@@ -76,5 +82,16 @@ public class SpringConfig {
         //获得xml中的cache
         demoCache.setCache(ehCacheCacheManager.getCache("demoCache"));
         return demoCache;
+    }
+
+    /**
+     * @param dataSource
+     * @return
+     */
+    @Bean
+    public DataSourceTransactionManager transactionManager(DataSource dataSource) {
+        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+        dataSourceTransactionManager.setDataSource(dataSource);
+        return dataSourceTransactionManager;
     }
 }
