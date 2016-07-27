@@ -13,6 +13,7 @@
         <!-- spring版本号 -->
         <spring.version>4.2.4.RELEASE</spring.version>
         <plugin.mybatis.generator>1.3.2</plugin.mybatis.generator>
+        <slf4j.version>1.7.9</slf4j.version>
     </properties>
 
 
@@ -145,12 +146,12 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.6.6</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.6</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <!-- log end -->
     </dependencies>

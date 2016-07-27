@@ -2,6 +2,8 @@ package com.idg.demo.controller;
 
 import com.idg.demo.domain.Module;
 import com.idg.demo.service.DemoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/demo")
 public class DemoController {
+
+    public static final Logger logger = LoggerFactory.getLogger(DemoController.class);
 
     @Autowired
     private DemoService demoService;
@@ -33,6 +37,7 @@ public class DemoController {
 
     @RequestMapping("/json")
     public Map<String, Object> json() {
+        logger.info("访问了{}{}接口!", "/demo", "/json");
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("hello", "spring4");
         return model;
