@@ -11,6 +11,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 import org.springframework.web.servlet.view.velocity.VelocityViewResolver;
 
+import java.util.Properties;
+
 /**
  * Created by yehao on 16/7/15.
  * springmvc配置类
@@ -30,6 +32,10 @@ public class SpringmvcConfig extends WebMvcConfigurerAdapter {
     public VelocityConfigurer velocityConfigurer() {
         VelocityConfigurer velocityConfigurer = new VelocityConfigurer();
         velocityConfigurer.setResourceLoaderPath("/WEB-INFO/view/");
+        Properties properties = new Properties();
+        properties.put("input.encoding", "UTF-8");
+        properties.put("output.encoding", "UTF-8");
+        velocityConfigurer.setVelocityProperties(properties);
         return velocityConfigurer;
     }
 
@@ -42,6 +48,7 @@ public class SpringmvcConfig extends WebMvcConfigurerAdapter {
     public ViewResolver viewResolver() {
         VelocityViewResolver velocityViewResolver = new VelocityViewResolver();
         velocityViewResolver.setSuffix(".vm");
+        velocityViewResolver.setContentType("text/html;charset=UTF-8");
         return velocityViewResolver;
     }
 
