@@ -2,8 +2,16 @@ package config;
 
 import com.idg.common.cache.DemoCache;
 import com.idg.common.mybatis.MybatisMapper;
+import com.rabbitmq.client.Channel;
 import net.sf.ehcache.CacheManager;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
+import org.springframework.amqp.core.AcknowledgeMode;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
@@ -72,8 +80,9 @@ public class SpringConfig {
     /**
      * 缓存操作对象
      *
-     * @param ehCacheCacheManager
-     * @return
+     * @param ehCacheCacheManager ehcache缓存管理器
+     * @return DemoCache bean
+     * @author yehao
      */
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -85,8 +94,11 @@ public class SpringConfig {
     }
 
     /**
-     * @param dataSource
-     * @return
+     * 事务管理器
+     *
+     * @param dataSource 数据源
+     * @return DataSourceTransactionManager bean
+     * @author yehao
      */
     @Bean
     public DataSourceTransactionManager transactionManager(DataSource dataSource) {
@@ -94,4 +106,61 @@ public class SpringConfig {
         dataSourceTransactionManager.setDataSource(dataSource);
         return dataSourceTransactionManager;
     }
+
+    /**
+     * 创建rabbitmq连接工厂
+     *
+     * @return ConnectionFactory bean
+     * @author yehao
+     */
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory("127.0.0.1");
+        cachingConnectionFactory.setUsername("mq_yh");
+        cachingConnectionFactory.setPassword("mq_yh");
+//        cachingConnectionFactory.setPort(AMQP.PROTOCOL.PORT);
+        cachingConnectionFactory.setVirtualHost("local_mq");
+        return cachingConnectionFactory;
+    }
+
+    /**
+     * 创建rabbitmq模板bean
+     *
+     * @param connectionFactory rabbitmq连接工厂
+     * @return RabbitTemplate bean
+     */
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate();
+        rabbitTemplate.setRoutingKey("local_queue");
+        rabbitTemplate.setQueue("local_queue");
+        rabbitTemplate.setConnectionFactory(connectionFactory);
+        return rabbitTemplate;
+    }
+
+    @Bean
+    public SimpleMessageListenerContainer listenerContainer(ConnectionFactory connectionFactory) {
+        SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer();
+        simpleMessageListenerContainer.setConnectionFactory(connectionFactory);
+        simpleMessageListenerContainer.setQueueNames("local_queue");
+        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+        simpleMessageListenerContainer.setMessageListener(new ChannelAwareMessageListener() {
+            /**
+             * Callback for processing a received Rabbit message.
+             * <p>Implementors are supposed to process the given Message,
+             * typically sending reply messages through the given Session.
+             *
+             * @param message the received AMQP message (never <code>null</code>)
+             * @param channel the underlying Rabbit Channel (never <code>null</code>)
+             * @throws Exception Any.
+             */
+            public void onMessage(Message message, Channel channel) throws Exception {
+                System.out.println(message);
+                channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+            }
+        });
+        return simpleMessageListenerContainer;
+    }
+
 }
+

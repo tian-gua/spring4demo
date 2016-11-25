@@ -1,9 +1,12 @@
 package com.idg.demo.controller;
 
+import com.idg.common.cache.DemoCache;
 import com.idg.demo.domain.Module;
 import com.idg.demo.service.DemoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +26,10 @@ public class DemoController {
 
     @Autowired
     private DemoService demoService;
+    @Autowired
+    private DemoCache cache;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
 
     @RequestMapping("/index")
@@ -51,5 +58,20 @@ public class DemoController {
     @RequestMapping("/tx")
     public int testTx() {
         return demoService.testTx();
+    }
+
+    @RequestMapping("/testEhcache")
+    public String testEhcache() {
+        return cache.getString("time");
+    }
+
+    @RequestMapping("/message/put")
+    public String putMessage(String key, String msg) {
+        try {
+            rabbitTemplate.convertAndSend(key,msg);
+        } catch (AmqpException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return msg;
     }
 }

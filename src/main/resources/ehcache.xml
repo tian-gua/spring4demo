@@ -3,5 +3,5 @@
     <defaultCache maxElementsInMemory="1000" eternal="false" overflowToDisk="false" timeToIdleSeconds="0"
                   timeToLiveSeconds="100" diskPersistent="false" diskExpiryThreadIntervalSeconds="120"/>
     <cache name="demoCache" maxElementsInMemory="10" eternal="false" overflowToDisk="false" timeToIdleSeconds="0"
-           timeToLiveSeconds="100" diskPersistent="false" diskExpiryThreadIntervalSeconds="120"/>
+           timeToLiveSeconds="1800" diskPersistent="false" diskExpiryThreadIntervalSeconds="120"/>
 </ehcache>
